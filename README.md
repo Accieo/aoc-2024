@@ -5,15 +5,15 @@
 ## Solutions
 | Day | Status |
 | --- | ------ |
-| [Day 1](https://github.com/Accieo/aoc-2024/blob/master/main/day01.py) | :soon: :soon: |
-| [Day 2](https://github.com/Accieo/aoc-2024/blob/master/main/day02.py) | :soon: :soon: |
-| [Day 3](https://github.com/Accieo/aoc-2024/blob/master/main/day03.py) | :soon: :soon: |
-| [Day 4](https://github.com/Accieo/aoc-2024/blob/master/main/day04.py) | :soon: :soon: |
-| [Day 5](https://github.com/Accieo/aoc-2024/blob/master/main/day05.py) | :soon: :soon: |
-| [Day 6](https://github.com/Accieo/aoc-2024/blob/master/main/day06.py) | :soon: :soon: |
-| [Day 7](https://github.com/Accieo/aoc-2024/blob/master/main/day07.py) | :soon: :soon: |
-| [Day 8](https://github.com/Accieo/aoc-2024/blob/master/main/day08.py) | :soon: :soon: |
-| [Day 9](https://github.com/Accieo/aoc-2024/blob/master/main/day09.py) | :soon: :soon: |
+| [Day 01](https://github.com/Accieo/aoc-2024/blob/master/main/day01.py) | :soon: :soon: |
+| [Day 02](https://github.com/Accieo/aoc-2024/blob/master/main/day02.py) | :soon: :soon: |
+| [Day 03](https://github.com/Accieo/aoc-2024/blob/master/main/day03.py) | :soon: :soon: |
+| [Day 04](https://github.com/Accieo/aoc-2024/blob/master/main/day04.py) | :soon: :soon: |
+| [Day 05](https://github.com/Accieo/aoc-2024/blob/master/main/day05.py) | :soon: :soon: |
+| [Day 06](https://github.com/Accieo/aoc-2024/blob/master/main/day06.py) | :soon: :soon: |
+| [Day 07](https://github.com/Accieo/aoc-2024/blob/master/main/day07.py) | :soon: :soon: |
+| [Day 08](https://github.com/Accieo/aoc-2024/blob/master/main/day08.py) | :soon: :soon: |
+| [Day 09](https://github.com/Accieo/aoc-2024/blob/master/main/day09.py) | :soon: :soon: |
 | [Day 10](https://github.com/Accieo/aoc-2024/blob/master/main/day10.py) | :soon: :soon: |
 | [Day 11](https://github.com/Accieo/aoc-2024/blob/master/main/day11.py) | :soon: :soon: |
 | [Day 12](https://github.com/Accieo/aoc-2024/blob/master/main/day12.py) | :soon: :soon: |
