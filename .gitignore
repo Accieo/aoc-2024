@@ -8,5 +8,5 @@ __pycache__/
 cookie.txt
 
 # Anti-lawsuit ignore
-input/
-examples/
+input/*.txt
+examples/*.txt
