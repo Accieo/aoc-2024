@@ -1,6 +1,14 @@
 # Advent of Code 2024
-
 [AoC](https://adventofcode.com/2024) solved in Python :snake:
+
+## Setup
+Add your aoc cookie to `cookie.txt` in the root of the project.  
+
+## Tests
+To run tests, run the files as a module  
+```py
+python -m tests.day00 
+```
 
 ## Solutions
 | Day | Status |
