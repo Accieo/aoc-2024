@@ -15,11 +15,11 @@ make test day=0
 ```
 
 ### Using python
-```py
+```sh
 python main/day00.py
 ```
 
-```py
+```sh
 python -m tests.day00 
 ```
 
