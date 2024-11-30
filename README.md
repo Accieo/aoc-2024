@@ -4,8 +4,21 @@
 ## Setup
 Add your aoc cookie to `cookie.txt` in the root of the project.  
 
-## Tests
-To run tests, run the files as a module  
+## Execution
+### Using make
+```sh
+make run day=0
+```
+
+```sh
+make test day=0
+```
+
+### Using python
+```py
+python main/day00.py
+```
+
 ```py
 python -m tests.day00 
 ```
