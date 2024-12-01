@@ -6,10 +6,10 @@ def common(input_source: Literal["input", "examples"] = "input"):
 
     return
 
-def part_one():
+def part_one(input_source: Literal["input", "examples"] = "input"):
     return
 
-def part_two():
+def part_two(input_source: Literal["input", "examples"] = "input"):
     return
 
 if __name__ == "__main__":

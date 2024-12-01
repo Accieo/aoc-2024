@@ -1,11 +1,8 @@
 import unittest
 
-from main.day00 import common, part_one, part_two
+from main.day00 import part_one, part_two
 
 class Day00Tests(unittest.TestCase):
-    def setUp(self) -> None:
-        self.input_data = common(input_source="examples")
-
     def test_part_one(self):
         pass
 
