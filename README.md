@@ -27,7 +27,7 @@ python -m tests.day00
 | Day | Status |
 | --- | ------ |
 | [Day 01](https://github.com/Accieo/aoc-2024/blob/main/main/day01.py) | :star: :star: |
-| [Day 02](https://github.com/Accieo/aoc-2024/blob/main/main/day02.py) | :soon: :soon: |
+| [Day 02](https://github.com/Accieo/aoc-2024/blob/main/main/day02.py) | :star: :star: |
 | [Day 03](https://github.com/Accieo/aoc-2024/blob/main/main/day03.py) | :soon: :soon: |
 | [Day 04](https://github.com/Accieo/aoc-2024/blob/main/main/day04.py) | :soon: :soon: |
 | [Day 05](https://github.com/Accieo/aoc-2024/blob/main/main/day05.py) | :soon: :soon: |
