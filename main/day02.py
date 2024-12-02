@@ -27,10 +27,7 @@ def is_within_level(report: List[int]) -> bool:
 def part_one(input_source: Literal["input", "examples"] = "input") -> int:
     reports = common(input_source)
 
-    safe = []
-    for report in reports:
-        if (is_increasing(report) or is_decreasing(report)) and is_within_level(report):
-            safe.append(report)
+    safe = [r for r in reports if (is_increasing(r) or is_decreasing(r)) and is_within_level(r)]
 
     return len(safe)
 
