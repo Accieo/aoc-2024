@@ -26,7 +26,7 @@ def part_one(input_source: Literal["input", "examples"] = "input") -> int:
 
     return sum(products)
 
-def part_two(input_source: Literal["input", "examples"] = "input"):
+def part_two(input_source: Literal["input", "examples"] = "input") -> int:
     data = common(input_source)
     operations = parse_all(data)
 
