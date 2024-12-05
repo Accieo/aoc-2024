@@ -1,4 +1,5 @@
 import time
+from collections import deque, defaultdict
 from typing import Literal, List, Tuple, Dict
 
 Page = List[int]
@@ -41,18 +42,42 @@ def is_ordered(update: Page, rules: RuleMap) -> bool:
             pages_after = set(update).intersection(rules[page])
             update_valid.append(all([pidx < update.index(n) for n in pages_after]))
 
-    if all(update_valid):
-        return True
+    return all(update_valid)
 
-    return False
+def topological_sort(update: Page, rules: RuleMap) -> Page:
+    """https://en.wikipedia.org/wiki/Topological_sorting"""
+    graph = defaultdict(list)
+    in_degree = defaultdict(int)
+
+    for page in update:
+        if page in rules:
+            for after in rules[page]:
+                if after in update:
+                    graph[page].append(after)
+                    in_degree[after] += 1
+                    if after not in in_degree:
+                        in_degree[after] = 0
+
+    queue = deque([page for page in update if in_degree[page] == 0])
+    sorted_update = []
+
+    # https://en.wikipedia.org/wiki/Topological_sorting#Kahn's_algorithm
+    while queue:
+        page = queue.popleft()
+        sorted_update.append(page)
+
+        for neighbor in graph[page]:
+            in_degree[neighbor] -= 1
+            if in_degree[neighbor] == 0:
+                queue.append(neighbor)
+
+    return sorted_update
 
 def part_one(input_source: Literal["input", "examples"] = "input") -> int:
     rules, pages = common(input_source)
 
     valid_updates, _ = classify_updates(pages=pages, rules=rules)
-    middle_pages = []
-    for update in valid_updates:
-        middle_pages.append(update[len(update) // 2])
+    middle_pages = [update[len(update) // 2] for update in valid_updates]
 
     return sum(middle_pages)
 
@@ -61,7 +86,15 @@ def part_two(input_source: Literal["input", "examples"] = "input") -> int:
 
     _, invalid_updates = classify_updates(pages=pages, rules=rules)
 
-    return 0
+    ordered_updates = []
+    for update in invalid_updates:
+        sorted_update = topological_sort(update, rules)
+        if sorted_update:
+            ordered_updates.append(sorted_update)
+
+    middle_pages = [update[len(update) // 2] for update in ordered_updates]
+
+    return sum(middle_pages)
 
 if __name__ == "__main__":
     start_one = time.perf_counter()
