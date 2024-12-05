@@ -7,7 +7,7 @@ class Day05Tests(unittest.TestCase):
         self.assertEqual(part_one(input_source="examples"), 143)
 
     def test_part_two(self):
-        pass
+        self.assertEqual(part_two(input_source="examples"), 123)
 
 if __name__ == "__main__":
     unittest.main()
