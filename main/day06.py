@@ -1,0 +1,163 @@
+import time
+from copy import deepcopy
+from typing import Literal, List, Tuple
+
+Direction = str
+Map = List[List[str]]
+Position = Tuple[int, int]
+WalkedPath = List[List[int]]
+
+UP, DOWN, LEFT, RIGHT = "^", "v", "<", ">"
+OBSTACLE = "#"
+NOTHING = "."
+WALKED = "X"
+
+def common(input_source: Literal["input", "examples"] = "input"):
+    with open(f"{input_source}/day06.txt", "r") as file:
+        data = file.read().strip().splitlines()
+        data = list(map(list, data))
+
+    return data
+
+def move_guard(lab_map: Map) -> Tuple[WalkedPath, Map]:
+    """
+    Moves the guard within the lab map.
+
+    Coordinates are represented as (y, x).
+
+        y
+        ^
+        |
+        ⋅--> x
+
+    """
+    (start_y, start_x), current_direction = get_pos_and_dir(lab_map=lab_map)
+
+    walked_path = [[start_y, start_x]]
+    if current_direction == UP:
+        path = "".join([lab_map[y][start_x] for y in range(start_y - 1, -1, -1)])
+        obstacle_idx = path.find(OBSTACLE)
+        for walked_y in range(start_y - 1, start_y - obstacle_idx - 1, -1):
+            walked_path.append([walked_y, start_x])
+    elif current_direction == DOWN:
+        path = "".join([lab_map[y][start_x] for y in range(start_y + 1, len(lab_map))])
+        obstacle_idx = path.find(OBSTACLE)
+        for walked_y in range(start_y + 1, start_y + obstacle_idx + 1):
+            walked_path.append([walked_y, start_x])
+    elif current_direction == LEFT:
+        path = "".join([lab_map[start_y][x] for x in range(start_x - 1, -1, -1)])
+        obstacle_idx = path.find(OBSTACLE)
+        for walked_x in range(start_x - 1, start_x - obstacle_idx - 1, -1):
+            walked_path.append([start_y, walked_x])
+    elif current_direction == RIGHT:
+        path = "".join([lab_map[start_y][x] for x in range(start_x + 1, len(lab_map[0]))])
+        obstacle_idx = path.find(OBSTACLE)
+        for walked_x in range(start_x + 1, start_x + obstacle_idx + 1):
+            walked_path.append([start_y, walked_x])
+
+    end_y, end_x = walked_path[-1]
+    lab_map[start_y][start_x] = NOTHING
+    lab_map[end_y][end_x] = current_direction
+
+    return walked_path, lab_map
+
+def get_pos_and_dir(lab_map: Map) -> Tuple[Position, Direction]:
+    """
+    Gets the current guard's position and facing direction
+    """
+    direction = ""
+    coords = (0, 0) 
+    for y, line in enumerate(lab_map):
+        for dir in [UP, DOWN, LEFT, RIGHT]:
+            if dir in line:
+                x = line.index(dir)
+                coords = (y, x)
+                direction = dir
+
+    return coords, direction
+
+def is_facing_obstacle(lab_map: Map) -> Tuple[str, bool]:
+    """
+    Checks if there is an obstacle in front of the guard
+    When true, the guard's direction is rotated and returns true
+    When false, the guard's position stays as is and returns false
+    """
+    (y, x), current_direction = get_pos_and_dir(lab_map=lab_map)
+
+    direction_offsets = {
+        UP: (-1, 0, ">"),
+        DOWN: (1, 0, "<"),
+        LEFT: (0, -1, "^"),
+        RIGHT: (0, 1, "v")
+    }
+
+    dy, dx, rotate_dir = direction_offsets[current_direction]
+    neighbor_y, neighbor_x = y + dy, x + dx
+
+    if (0 <= neighbor_y < len(lab_map) and 0 <= neighbor_x < len(lab_map[0])):
+        if lab_map[neighbor_y][neighbor_x] == OBSTACLE:
+            return rotate_dir, True
+
+    return current_direction, False
+
+def walk_towards_void(lab_map: Map) -> WalkedPath:
+    """Get walked path towards void"""
+    current_direction, _ = is_facing_obstacle(lab_map=lab_map)
+    (y, x), _ = get_pos_and_dir(lab_map=lab_map)
+    walked_to_void = []
+
+    while 0 <= y < len(lab_map) and 0 <= x < len(lab_map[0]):
+        walked_to_void.append([y, x])
+        if current_direction == UP:
+            y -= 1
+        elif current_direction == DOWN:
+            y += 1
+        elif current_direction == LEFT:
+            x -= 1
+        elif current_direction == RIGHT:
+            x += 1
+        if not (0 <= y < len(lab_map) and 0 <= x < len(lab_map[0])):
+            break
+
+    return walked_to_void
+
+def part_one(input_source: Literal["input", "examples"] = "input") -> int:
+    lab_map = common(input_source)
+
+    walked_paths = []
+    found_void = True
+    walked, lab_map = move_guard(lab_map=lab_map)
+    while found_void:
+        walked_paths.extend(walked)
+        current_direction, found_void = is_facing_obstacle(lab_map=lab_map)
+        (y, x), _ = get_pos_and_dir(lab_map=lab_map)
+        lab_map[y][x] = current_direction
+        walked, lab_map = move_guard(lab_map=lab_map)
+
+
+    walked_paths.extend(walk_towards_void(lab_map=lab_map))
+
+    working_lab_map = deepcopy(lab_map)
+
+    for y, x in walked_paths:
+        working_lab_map[y][x] = WALKED
+
+    count_walked = 0
+    for rowtile in working_lab_map:
+        count_walked += rowtile.count(WALKED)
+
+    return count_walked
+
+def part_two(input_source: Literal["input", "examples"] = "input"):
+    return
+
+if __name__ == "__main__":
+    start_one = time.perf_counter()
+    result_one = part_one()
+    end_one = time.perf_counter()
+    print(f"Part one: {result_one}, took {end_one - start_one:.6f} seconds")
+
+    start_two = time.perf_counter()
+    result_two = part_two()
+    end_two = time.perf_counter()
+    print(f"Part two: {result_two}, took {end_two - start_two:.6f} seconds")
