@@ -1,6 +1,8 @@
+import sys
 import time
 from copy import deepcopy
 from typing import Literal, List, Tuple
+from concurrent.futures import ProcessPoolExecutor
 
 Direction = str
 Map = List[List[str]]
@@ -114,6 +116,35 @@ def walk_towards_void(lab_map: Map, y: int, x: int, current_direction: Direction
 
     return walked_to_void
 
+def brute_force_obstacle(start: int, end: int, lab_map: Map, thread_id: int) -> int:
+    """
+    Brute forces by placing obstacles from `i` up to `j`
+    returns `count` of times guard was stuck in an infinite loop
+    """
+    infinite = 0
+    max_iters = 10_000
+    for i in range(start, end):
+        for j in range(len(lab_map)):
+            wrk_map = deepcopy(lab_map)
+            if wrk_map[i][j] not in [UP, DOWN, LEFT, RIGHT]:
+                wrk_map[i][j] = OBSTACLE
+
+            (y, x), current_direction = get_pos_and_dir(wrk_map)
+
+            crr_iters = 0
+            found_void = True
+            while found_void:
+                crr_iters += 1
+
+                if crr_iters == max_iters:
+                    infinite += 1
+                    break
+
+                _, wrk_map = move_guard(wrk_map, y, x, current_direction)
+                (y, x), current_direction = get_pos_and_dir(wrk_map)
+                current_direction, found_void = is_facing_obstacle(wrk_map, y, x, current_direction)
+    return infinite
+
 def part_one(input_source: Literal["input", "examples"] = "input") -> int:
     lab_map = common(input_source)
 
@@ -141,30 +172,20 @@ def part_one(input_source: Literal["input", "examples"] = "input") -> int:
 def part_two(input_source: Literal["input", "examples"] = "input") -> int:
     lab_map = common(input_source)
 
-    infinite = 0
-    max_iters = 10_000
-    for i in range(len(lab_map[0])):
-        for j in range(len(lab_map)):
-            wrk_map = deepcopy(lab_map)
-            if wrk_map[i][j] not in [UP, DOWN, LEFT, RIGHT]:
-                wrk_map[i][j] = OBSTACLE
+    inputs = []
+    thread_id = 0
+    max_workers = 8
+    chunk_size = len(lab_map) // max_workers
+    for s in range(0, len(lab_map), chunk_size):
+        inputs.append((s, min(s + chunk_size, len(lab_map)), lab_map, thread_id))
+        thread_id += 1
 
-            (y, x), current_direction = get_pos_and_dir(wrk_map)
+    results = []
+    with ProcessPoolExecutor(max_workers=max_workers) as executor:
+        futures = [executor.submit(brute_force_obstacle, *args) for args in inputs]
+        results = [future.result() for future in futures]
 
-            crr_iters = 0
-            found_void = True
-            while found_void:
-                crr_iters += 1
-
-                if crr_iters == max_iters:
-                    infinite += 1
-                    break
-
-                _, wrk_map = move_guard(wrk_map, y, x, current_direction)
-                (y, x), current_direction = get_pos_and_dir(wrk_map)
-                current_direction, found_void = is_facing_obstacle(wrk_map, y, x, current_direction)
-
-    return infinite
+    return sum(results)
 
 if __name__ == "__main__":
     start_one = time.perf_counter()
