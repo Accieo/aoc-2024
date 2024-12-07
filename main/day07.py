@@ -13,7 +13,7 @@ def common(input_source: Literal["input", "examples"] = "input"):
 
     return results, members
 
-def calibrate(results: List[int], members: List[List[int]]) -> List[int]:
+def calibrate(results: List[int], members: List[List[int]], concat: bool = False) -> List[int]:
     """Tests whether the operators `(+)` and `(*)` can yield the `result` (key) for a `set of numbers` (values)"""
     possible = []
     
@@ -25,6 +25,8 @@ def calibrate(results: List[int], members: List[List[int]]) -> List[int]:
             for res in cumulative:
                 next_cumulative.append(res + num)
                 next_cumulative.append(res * num)
+                if concat:
+                    next_cumulative.append(int(str(res) + str(num)))
 
             cumulative = next_cumulative
 
@@ -41,7 +43,11 @@ def part_one(input_source: Literal["input", "examples"] = "input"):
     return sum(results)
 
 def part_two(input_source: Literal["input", "examples"] = "input"):
-    return
+    results, members = common(input_source)
+
+    results = calibrate(results, members, concat=True)
+
+    return sum(results)
 
 if __name__ == "__main__":
     start_one = time.perf_counter()
