@@ -19,7 +19,7 @@ def common(input_source: Literal["input", "examples"] = "input"):
 
     return data
 
-def move_guard(lab_map: Map) -> Tuple[WalkedPath, Map]:
+def move_guard(lab_map: Map, start_y: int, start_x: int, current_direction: Direction) -> Tuple[WalkedPath, Map]:
     """
     Moves the guard within the lab map.
 
@@ -31,8 +31,6 @@ def move_guard(lab_map: Map) -> Tuple[WalkedPath, Map]:
         ⋅--> x
 
     """
-    (start_y, start_x), current_direction = get_pos_and_dir(lab_map=lab_map)
-
     walked_path = [[start_y, start_x]]
     if current_direction == UP:
         path = "".join([lab_map[y][start_x] for y in range(start_y - 1, -1, -1)])
@@ -71,19 +69,16 @@ def get_pos_and_dir(lab_map: Map) -> Tuple[Position, Direction]:
         for dir in [UP, DOWN, LEFT, RIGHT]:
             if dir in line:
                 x = line.index(dir)
-                coords = (y, x)
-                direction = dir
+                return (y, x), dir
 
     return coords, direction
 
-def is_facing_obstacle(lab_map: Map) -> Tuple[str, bool]:
+def is_facing_obstacle(lab_map: Map, y: int, x: int, current_direction: Direction) -> Tuple[str, bool]:
     """
     Checks if there is an obstacle in front of the guard
     When true, the guard's direction is rotated and returns true
     When false, the guard's position stays as is and returns false
     """
-    (y, x), current_direction = get_pos_and_dir(lab_map=lab_map)
-
     direction_offsets = {
         UP: (-1, 0, ">"),
         DOWN: (1, 0, "<"),
@@ -100,10 +95,8 @@ def is_facing_obstacle(lab_map: Map) -> Tuple[str, bool]:
 
     return current_direction, False
 
-def walk_towards_void(lab_map: Map) -> WalkedPath:
+def walk_towards_void(lab_map: Map, y: int, x: int, current_direction: Direction) -> WalkedPath:
     """Get walked path towards void"""
-    current_direction, _ = is_facing_obstacle(lab_map=lab_map)
-    (y, x), _ = get_pos_and_dir(lab_map=lab_map)
     walked_to_void = []
 
     while 0 <= y < len(lab_map) and 0 <= x < len(lab_map[0]):
@@ -124,32 +117,54 @@ def walk_towards_void(lab_map: Map) -> WalkedPath:
 def part_one(input_source: Literal["input", "examples"] = "input") -> int:
     lab_map = common(input_source)
 
+    (y, x), current_direction = get_pos_and_dir(lab_map=lab_map)
+
     walked_paths = []
-    found_void = True
-    walked, lab_map = move_guard(lab_map=lab_map)
-    while found_void:
+    while True:
+        walked, lab_map = move_guard(lab_map, y, x, current_direction)
         walked_paths.extend(walked)
-        current_direction, found_void = is_facing_obstacle(lab_map=lab_map)
-        (y, x), _ = get_pos_and_dir(lab_map=lab_map)
-        lab_map[y][x] = current_direction
-        walked, lab_map = move_guard(lab_map=lab_map)
+        (y, x), current_direction = get_pos_and_dir(lab_map)
+        current_direction, found_obstacle = is_facing_obstacle(lab_map, y, x, current_direction)
+        
+        if not found_obstacle:
+            break
 
-
-    walked_paths.extend(walk_towards_void(lab_map=lab_map))
-
-    working_lab_map = deepcopy(lab_map)
+    walked_paths.extend(walk_towards_void(lab_map, y, x, current_direction))
 
     for y, x in walked_paths:
-        working_lab_map[y][x] = WALKED
+        lab_map[y][x] = WALKED
 
-    count_walked = 0
-    for rowtile in working_lab_map:
-        count_walked += rowtile.count(WALKED)
+    count_walked = sum(row.count(WALKED) for row in lab_map)
 
     return count_walked
 
-def part_two(input_source: Literal["input", "examples"] = "input"):
-    return
+def part_two(input_source: Literal["input", "examples"] = "input") -> int:
+    lab_map = common(input_source)
+
+    infinite = 0
+    max_iters = 10_000
+    for i in range(len(lab_map[0])):
+        for j in range(len(lab_map)):
+            wrk_map = deepcopy(lab_map)
+            if wrk_map[i][j] not in [UP, DOWN, LEFT, RIGHT]:
+                wrk_map[i][j] = OBSTACLE
+
+            (y, x), current_direction = get_pos_and_dir(wrk_map)
+
+            crr_iters = 0
+            found_void = True
+            while found_void:
+                crr_iters += 1
+
+                if crr_iters == max_iters:
+                    infinite += 1
+                    break
+
+                _, wrk_map = move_guard(wrk_map, y, x, current_direction)
+                (y, x), current_direction = get_pos_and_dir(wrk_map)
+                current_direction, found_void = is_facing_obstacle(wrk_map, y, x, current_direction)
+
+    return infinite
 
 if __name__ == "__main__":
     start_one = time.perf_counter()

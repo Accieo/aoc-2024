@@ -1,13 +1,13 @@
 import unittest
 
-from main.day06 import is_facing_obstacle, move_guard, part_one, part_two
+from main.day06 import is_facing_obstacle, get_pos_and_dir, move_guard, part_one, part_two
 
 class Day06Tests(unittest.TestCase):
     def test_part_one(self):
         self.assertEqual(part_one(input_source="examples"), 41)
 
     def test_part_two(self):
-        pass
+        self.assertEqual(part_two(input_source="examples"), 6)
 
     # Obstacle detection tests
     def test_obs_up_detection(self):
@@ -16,7 +16,8 @@ class Day06Tests(unittest.TestCase):
             [".", ".", "^"],
             [".", ".", "."],
         ]
-        rotate_dir, facing_obstacle = is_facing_obstacle(lab_map=lab_map)
+        (y, x), current_direction = get_pos_and_dir(lab_map)
+        rotate_dir, facing_obstacle = is_facing_obstacle(lab_map=lab_map, y=y, x=x, current_direction=current_direction)
         self.assertEqual(rotate_dir, ">")
         self.assertEqual(facing_obstacle, True)
 
@@ -26,7 +27,8 @@ class Day06Tests(unittest.TestCase):
             [".", ".", "v"],
             [".", ".", "#"],
         ]
-        rotate_dir, facing_obstacle = is_facing_obstacle(lab_map=lab_map)
+        (y, x), current_direction = get_pos_and_dir(lab_map)
+        rotate_dir, facing_obstacle = is_facing_obstacle(lab_map=lab_map, y=y, x=x, current_direction=current_direction)
         self.assertEqual(rotate_dir, "<")
         self.assertEqual(facing_obstacle, True)
 
@@ -36,7 +38,8 @@ class Day06Tests(unittest.TestCase):
             ["#", "<", "."],
             [".", ".", "."],
         ]
-        rotate_dir, facing_obstacle = is_facing_obstacle(lab_map=lab_map)
+        (y, x), current_direction = get_pos_and_dir(lab_map)
+        rotate_dir, facing_obstacle = is_facing_obstacle(lab_map=lab_map, y=y, x=x, current_direction=current_direction)
         self.assertEqual(rotate_dir, "^")
         self.assertEqual(facing_obstacle, True)
 
@@ -46,7 +49,8 @@ class Day06Tests(unittest.TestCase):
             [".", ">", "#"],
             [".", ".", "."],
         ]
-        rotate_dir, facing_obstacle = is_facing_obstacle(lab_map=lab_map)
+        (y, x), current_direction = get_pos_and_dir(lab_map)
+        rotate_dir, facing_obstacle = is_facing_obstacle(lab_map=lab_map, y=y, x=x, current_direction=current_direction)
         self.assertEqual(rotate_dir, "v")
         self.assertEqual(facing_obstacle, True)
 
@@ -56,7 +60,8 @@ class Day06Tests(unittest.TestCase):
             [".", ">", "."],
             [".", ".", "."],
         ]
-        rotate_dir, facing_obstacle = is_facing_obstacle(lab_map=lab_map)
+        (y, x), current_direction = get_pos_and_dir(lab_map)
+        rotate_dir, facing_obstacle = is_facing_obstacle(lab_map=lab_map, y=y, x=x, current_direction=current_direction)
         self.assertEqual(rotate_dir, ">")
         self.assertEqual(facing_obstacle, False)
 
@@ -66,7 +71,8 @@ class Day06Tests(unittest.TestCase):
             [".", ".", "."],
             [".", ".", "."],
         ]
-        rotate_dir, facing_obstacle = is_facing_obstacle(lab_map=lab_map)
+        (y, x), current_direction = get_pos_and_dir(lab_map)
+        rotate_dir, facing_obstacle = is_facing_obstacle(lab_map=lab_map, y=y, x=x, current_direction=current_direction)
         self.assertEqual(rotate_dir, "^")
         self.assertEqual(facing_obstacle, False)
 
@@ -76,7 +82,8 @@ class Day06Tests(unittest.TestCase):
             [".", ".", ">"],
             [".", ".", "."],
         ]
-        rotate_dir, facing_obstacle = is_facing_obstacle(lab_map=lab_map)
+        (y, x), current_direction = get_pos_and_dir(lab_map)
+        rotate_dir, facing_obstacle = is_facing_obstacle(lab_map=lab_map, y=y, x=x, current_direction=current_direction)
         self.assertEqual(rotate_dir, ">")
         self.assertEqual(facing_obstacle, False)
 
@@ -86,7 +93,8 @@ class Day06Tests(unittest.TestCase):
             ["<", ".", "."],
             [".", ".", "."],
         ]
-        rotate_dir, facing_obstacle = is_facing_obstacle(lab_map=lab_map)
+        (y, x), current_direction = get_pos_and_dir(lab_map)
+        rotate_dir, facing_obstacle = is_facing_obstacle(lab_map=lab_map, y=y, x=x, current_direction=current_direction)
         self.assertEqual(rotate_dir, "<")
         self.assertEqual(facing_obstacle, False)
 
@@ -96,7 +104,8 @@ class Day06Tests(unittest.TestCase):
             [".", ".", "."],
             [".", "v", "."],
         ]
-        rotate_dir, facing_obstacle = is_facing_obstacle(lab_map=lab_map)
+        (y, x), current_direction = get_pos_and_dir(lab_map)
+        rotate_dir, facing_obstacle = is_facing_obstacle(lab_map=lab_map, y=y, x=x, current_direction=current_direction)
         self.assertEqual(rotate_dir, "v")
         self.assertEqual(facing_obstacle, False)
 
@@ -112,7 +121,8 @@ class Day06Tests(unittest.TestCase):
             [".", "^", "."],
             [".", ".", "."],
         ]
-        walked, lab_map = move_guard(lab_map=lab_map_before)
+        (y, x), current_direction = get_pos_and_dir(lab_map_before)
+        walked, lab_map = move_guard(lab_map=lab_map_before, start_y=y, start_x=x, current_direction=current_direction)
         self.assertEqual(walked, [[2,1], [1,1]])
         self.assertEqual(lab_map, lab_map_after)
 
@@ -127,7 +137,8 @@ class Day06Tests(unittest.TestCase):
             [".", "v", "."],
             [".", "#", "."],
         ]
-        walked, lab_map = move_guard(lab_map=lab_map_before)
+        (y, x), current_direction = get_pos_and_dir(lab_map_before)
+        walked, lab_map = move_guard(lab_map=lab_map_before, start_y=y, start_x=x, current_direction=current_direction)
         self.assertEqual(walked, [[0,1], [1,1]])
         self.assertEqual(lab_map, lab_map_after)
 
@@ -142,7 +153,8 @@ class Day06Tests(unittest.TestCase):
             [".", ">", "#"],
             [".", ".", "."],
         ]
-        walked, lab_map = move_guard(lab_map=lab_map_before)
+        (y, x), current_direction = get_pos_and_dir(lab_map_before)
+        walked, lab_map = move_guard(lab_map=lab_map_before, start_y=y, start_x=x, current_direction=current_direction)
         self.assertEqual(walked, [[1,0], [1,1]])
         self.assertEqual(lab_map, lab_map_after)
 
@@ -157,7 +169,8 @@ class Day06Tests(unittest.TestCase):
             ["#", "<", "."],
             [".", ".", "."],
         ]
-        walked, lab_map = move_guard(lab_map=lab_map_before)
+        (y, x), current_direction = get_pos_and_dir(lab_map_before)
+        walked, lab_map = move_guard(lab_map=lab_map_before, start_y=y, start_x=x, current_direction=current_direction)
         self.assertEqual(walked, [[1,2], [1,1]])
         self.assertEqual(lab_map, lab_map_after)
 
