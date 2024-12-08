@@ -23,6 +23,17 @@ python main/day00.py
 python -m tests.day00 
 ```
 
+## Profiling
+### Using make
+```sh
+make profile day=0
+```
+
+### Using python
+```sh
+python -m cProfile -s cumulative main/day00.py
+```
+
 ## Solutions
 | Day | Status |
 | --- | ------ |
