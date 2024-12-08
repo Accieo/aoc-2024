@@ -1,4 +1,3 @@
-import sys
 import time
 from copy import deepcopy
 from typing import Literal, List, Tuple
