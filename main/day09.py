@@ -1,34 +1,44 @@
-from collections import deque
 import time
 from typing import Literal
+from collections import deque
 
 def common(input_source: Literal["input", "examples"] = "input"):
     with open(f"{input_source}/day09.txt", "r") as file:
         data = file.read().strip()
         data = list(map(int, list(data)))
 
-    return data
+        decompressed = []
+        for idx, n in enumerate(data):
+            if idx % 2 == 0:
+                decompressed.extend([idx // 2] * n)
+            else:
+                decompressed.extend([-1] * n)
+
+    return decompressed
 
 def part_one(input_source: Literal["input", "examples"] = "input"):
     disk_map = common(input_source)
 
-    decompressed = []
-    for idx, n in enumerate(disk_map):
-        if idx % 2 == 0:
-            decompressed.extend([idx // 2] * n)
-        else:
-            decompressed.extend([-1] * n)
-
-    queue = deque(decompressed)
+    free_space = deque([idx for idx, n in enumerate(disk_map) if n == -1])
+    queue = deque(disk_map)
     while queue:
-        queue.pop()
-        pop_idx = len(queue)
-        slot_idx = decompressed.index(-1)
+        v = queue.pop()
 
-        decompressed[pop_idx], decompressed[slot_idx] = decompressed[slot_idx], decompressed[pop_idx]
+        if v == -1:
+            continue
+
+        pop_idx = len(queue)
+        slot_idx = free_space.popleft()
+
+        disk_map[pop_idx], disk_map[slot_idx] = disk_map[slot_idx], disk_map[pop_idx]
+
+        # Consecutive free space windows can be max. 9, so we check if the next 10 are -1 to be sure
+        # that we've hit the limit
+        if all(val == -1 for val in disk_map[slot_idx + 1:slot_idx + 10]):
+            break
 
     checksum = 0
-    no_slots = list(filter(lambda x: x != -1, decompressed[1:]))
+    no_slots = list(filter(lambda x: x != -1, disk_map))
     for idx, n in enumerate(no_slots):
         checksum += idx * n
 
