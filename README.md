@@ -1,7 +1,7 @@
 # Advent of Code 2024
 [AoC](https://adventofcode.com/2024) solved in Python :snake:
 
-## Setup
+## Requirements
 Add your aoc cookie to `cookie.txt` in the root of the project.  
 
 ## Make commands
