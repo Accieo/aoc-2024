@@ -4,16 +4,22 @@
 ## Setup
 Add your aoc cookie to `cookie.txt` in the root of the project.  
 
+## Make commands
+
+| Command | Description                          |
+| ------- | ------------------------------------ |
+| get     | Setup boilerplate for the given day  |
+| run     | Run main file for the given day      |
+| test    | Run test file for the given day      |
+| profile | Run code profiling for the given day |
+
+## Setup boilerplate
+Call the `getday.sh` script with a day number as an argument
+```sh
+./getday.sh 0
+```
+
 ## Execution
-### Using make
-```sh
-make run day=0
-```
-
-```sh
-make test day=0
-```
-
 ### Using python
 ```sh
 python main/day00.py
@@ -23,13 +29,6 @@ python main/day00.py
 python -m tests.day00 
 ```
 
-## Profiling
-### Using make
-```sh
-make profile day=0
-```
-
-### Using python
 ```sh
 python -m cProfile -s cumulative main/day00.py
 ```
