@@ -1,5 +1,6 @@
 import time
-from typing import Literal, List
+from typing import Literal
+from collections import Counter
 
 def common(input_source: Literal["input", "examples"] = "input"):
     with open(f"{input_source}/day11.txt", "r") as file:
@@ -9,35 +10,38 @@ def common(input_source: Literal["input", "examples"] = "input"):
 
     return stones
 
-def blink(stones: List[int]) -> List[int]:
-    new_stones = []
-    for stone in stones:
+def blink(stones: Counter) -> Counter:
+    new_counts = Counter()
+    for stone, count in stones.items():
         if stone == 0:
-            new_stones.append(1)
+            new_counts[1] += count
         elif len(str(stone)) % 2 == 0:
             strone = str(stone)
             l, r = strone[0: len(strone) // 2], strone[len(strone) // 2: len(strone)]
-            new_stones.extend([int(l), int(r)])
+            new_counts[int(l)] += count
+            new_counts[int(r)] += count
         else:
-            new_stones.append(stone * 2024)
+            new_counts[stone * 2024] += count
 
-    return new_stones
+    return new_counts
 
 def part_one(input_source: Literal["input", "examples"] = "input"):
     stones = common(input_source)
+    stone_counts = Counter(stones)
 
     for _ in range(25):
-        stones = blink(stones=stones)
+        stone_counts = blink(stones=stone_counts)
 
-    return len(stones)
+    return sum(stone_counts.values())
 
 def part_two(input_source: Literal["input", "examples"] = "input"):
     stones = common(input_source)
+    stone_counts = Counter(stones)
 
-    # for _ in range(75):
-    #     stones = blink(stones=stones)
+    for _ in range(75):
+        stone_counts = blink(stones=stone_counts)
 
-    return len(stones)
+    return sum(stone_counts.values())
 
 if __name__ == "__main__":
     start_one = time.perf_counter()
