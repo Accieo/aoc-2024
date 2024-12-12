@@ -47,7 +47,7 @@ python -m cProfile -s cumulative main/day00.py
 | [Day 09](https://github.com/Accieo/aoc-2024/blob/main/main/day09.py) | :star: :soon: |
 | [Day 10](https://github.com/Accieo/aoc-2024/blob/main/main/day10.py) | :star: :star: |
 | [Day 11](https://github.com/Accieo/aoc-2024/blob/main/main/day11.py) | :star: :star: |
-| [Day 12](https://github.com/Accieo/aoc-2024/blob/main/main/day12.py) | :soon: :soon: |
+| [Day 12](https://github.com/Accieo/aoc-2024/blob/main/main/day12.py) | :star: :soon: |
 | [Day 13](https://github.com/Accieo/aoc-2024/blob/main/main/day13.py) | :soon: :soon: |
 | [Day 14](https://github.com/Accieo/aoc-2024/blob/main/main/day14.py) | :soon: :soon: |
 | [Day 15](https://github.com/Accieo/aoc-2024/blob/main/main/day15.py) | :soon: :soon: |
