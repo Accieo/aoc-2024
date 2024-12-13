@@ -42,6 +42,10 @@ def determinant(v0: Vec2, v1: Vec2) -> int:
     return ax * by - bx * ay
 
 def part_one(input_source: Literal["input", "examples"] = "input"):
+    """
+    We have to solve a system of linear equations with two variables
+    Learned this one at university: https://en.wikipedia.org/wiki/Cramer%27s_rule
+    """
     claw_machines = common(input_source)
 
     total = 0
@@ -58,6 +62,10 @@ def part_one(input_source: Literal["input", "examples"] = "input"):
     return int(total)
 
 def part_two(input_source: Literal["input", "examples"] = "input"):
+    """
+    We have to solve a system of linear equations with two variables
+    Learned this one at university: https://en.wikipedia.org/wiki/Cramer%27s_rule
+    """
     claw_machines = common(input_source)
 
     OFFSET = 10_000_000_000_000
